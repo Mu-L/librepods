@@ -1055,7 +1055,7 @@ fun AccessibilitySettingsScreen() {
 
 
 @Composable
-fun AccessibilityToggle(text: String, mutableState: MutableState<Boolean>, independent: Boolean = false, description: String? = null) {
+fun AccessibilityToggle(text: String, mutableState: MutableState<Boolean>, independent: Boolean = false, description: String? = null, title: String? = null) {
     val isDarkTheme = isSystemInDarkTheme()
     var backgroundColor by remember { mutableStateOf(if (isDarkTheme) Color(0xFF1C1C1E) else Color(0xFFFFFFFF)) }
     val animatedBackgroundColor by animateColorAsState(targetValue = backgroundColor, animationSpec = tween(durationMillis = 500))
@@ -1065,7 +1065,20 @@ fun AccessibilityToggle(text: String, mutableState: MutableState<Boolean>, indep
     Column(
         modifier = Modifier
             .padding(vertical = 8.dp)
-    ) {    
+    ) {
+        if (title != null) {
+            Text(
+                text = title,
+                style = TextStyle(
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Light,
+                    color = textColor.copy(alpha = 0.6f),
+                    fontFamily = FontFamily(Font(R.font.sf_pro))
+                ),
+                modifier = Modifier.padding(8.dp, bottom = 2.dp)
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+        }
         Box (
             modifier = Modifier
                 .background(animatedBackgroundColor, cornerShape)

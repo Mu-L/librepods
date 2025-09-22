@@ -173,7 +173,10 @@ class ATTManager(private val device: BluetoothDevice) {
         val inp = input ?: throw IllegalStateException("Not connected")
         val buffer = ByteArray(512)
         val len = inp.read(buffer)
-        if (len <= 0) throw IllegalStateException("No data read from ATT socket")
+        if (len == -1) {
+            disconnect()
+            throw IllegalStateException("End of stream reached")
+        }
         val data = buffer.copyOfRange(0, len)
         Log.wtf(TAG, "Read ${data.size} bytes from ATT")
         Log.d(TAG, "readPDU: ${data.joinToString(" ") { String.format("%02X", it) }}")

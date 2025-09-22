@@ -146,7 +146,16 @@ fun IndependentToggle(name: String, service: AirPodsService? = null, functionNam
                     .padding(horizontal = 12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = name, modifier = Modifier.weight(1f), fontSize = 16.sp, color = textColor)
+                Text(
+                    text = name,
+                    modifier = Modifier.weight(1f),
+                    style = TextStyle(
+                        fontSize = 16.sp,
+                        fontFamily = FontFamily(Font(R.font.sf_pro)),
+                        fontWeight = FontWeight.Normal,
+                        color = textColor
+                    )
+                )
                 StyledSwitch(
                     checked = checked,
                     onCheckedChange = {

@@ -221,6 +221,10 @@ fun HearingAidScreen(navController: NavController) {
                 }
             }
 
+            val mediaAssistEnabled = remember { mutableStateOf(false) }
+            val adjustMediaEnabled = remember { mutableStateOf(false) }
+            val adjustPhoneEnabled = remember { mutableStateOf(false) }
+
             LaunchedEffect(Unit) {
                 aacpManager?.registerControlCommandListener(AACPManager.Companion.ControlCommandIdentifiers.HEARING_AID, hearingAidListener)
                 aacpManager?.registerControlCommandListener(AACPManager.Companion.ControlCommandIdentifiers.HEARING_ASSIST_CONFIG, hearingAidListener)
@@ -256,7 +260,8 @@ fun HearingAidScreen(navController: NavController) {
                 style = TextStyle(
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Light,
-                    color = textColor.copy(alpha = 0.6f)
+                    color = textColor.copy(alpha = 0.6f),
+                    fontFamily = FontFamily(Font(R.font.sf_pro))
                 ),
                 modifier = Modifier.padding(8.dp, bottom = 2.dp)
             )
@@ -336,6 +341,108 @@ fun HearingAidScreen(navController: NavController) {
                 ),
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            AccessibilityToggle(
+                text = stringResource(R.string.media_assist),
+                mutableState = mediaAssistEnabled,
+                independent = true,
+                description = stringResource(R.string.media_assist_description),
+                title = stringResource(R.string.media_assist).uppercase()
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Column (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(backgroundColor, RoundedCornerShape(14.dp))
+            ) {
+                val isDarkThemeLocal = isSystemInDarkTheme()
+                var backgroundColorAdjustMedia by remember { mutableStateOf(if (isDarkThemeLocal) Color(0xFF1C1C1E) else Color(0xFFFFFFFF)) }
+                val animatedBackgroundColorAdjustMedia by animateColorAsState(targetValue = backgroundColorAdjustMedia, animationSpec = tween(durationMillis = 500))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp)
+                        .pointerInput(Unit) {
+                            detectTapGestures(
+                                onPress = {
+                                    backgroundColorAdjustMedia = if (isDarkThemeLocal) Color(0x40888888) else Color(0x40D9D9D9)
+                                    tryAwaitRelease()
+                                    backgroundColorAdjustMedia = if (isDarkThemeLocal) Color(0xFF1C1C1E) else Color(0xFFFFFFFF)
+                                },
+                                onTap = {
+                                    adjustMediaEnabled.value = !adjustMediaEnabled.value
+                                }
+                            )
+                        },
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = stringResource(R.string.adjust_media),
+                        modifier = Modifier.weight(1f),
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            fontFamily = FontFamily(Font(R.font.sf_pro)),
+                            fontWeight = FontWeight.Normal,
+                            color = textColor
+                        )
+                    )
+                    StyledSwitch(
+                        checked = adjustMediaEnabled.value,
+                        onCheckedChange = {
+                            adjustMediaEnabled.value = it
+                        },
+                    )
+                }
+
+                HorizontalDivider(
+                    thickness = 1.5.dp,
+                    color = Color(0x40888888),
+                    modifier = Modifier
+                        .padding(start = 12.dp, end = 0.dp)
+                )
+
+                var backgroundColorAdjustPhone by remember { mutableStateOf(if (isDarkThemeLocal) Color(0xFF1C1C1E) else Color(0xFFFFFFFF)) }
+                val animatedBackgroundColorAdjustPhone by animateColorAsState(targetValue = backgroundColorAdjustPhone, animationSpec = tween(durationMillis = 500))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp)
+                        .pointerInput(Unit) {
+                            detectTapGestures(
+                                onPress = {
+                                    backgroundColorAdjustPhone = if (isDarkThemeLocal) Color(0x40888888) else Color(0x40D9D9D9)
+                                    tryAwaitRelease()
+                                    backgroundColorAdjustPhone = if (isDarkThemeLocal) Color(0xFF1C1C1E) else Color(0xFFFFFFFF)
+                                },
+                                onTap = {
+                                    adjustPhoneEnabled.value = !adjustPhoneEnabled.value
+                                }
+                            )
+                        },
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = stringResource(R.string.adjust_calls),
+                        modifier = Modifier.weight(1f),
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            fontFamily = FontFamily(Font(R.font.sf_pro)),
+                            fontWeight = FontWeight.Normal,
+                            color = textColor
+                        )
+                    )
+                    StyledSwitch(
+                        checked = adjustPhoneEnabled.value,
+                        onCheckedChange = {
+                            adjustPhoneEnabled.value = it
+                        },
+                    )
+                }
+            }
         }
     }
 }

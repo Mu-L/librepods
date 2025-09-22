@@ -130,4 +130,8 @@
     <string name="conversation_boost">Conversation Boost</string>
     <string name="conversation_boost_description">Conversation Boost focuses your AirPods Pro on the person talking in front of you, making it easier to hear in a face-to-face conversation.</string>
     <string name="hearing_aid_description">AirPods can use the results of a hearing test to make adjustments that improve the clarity of voices and sounds around you. \n\n Hearing Aid is only intended for people with perceived mild to moderate hearing loss.</string>
+    <string name="media_assist">Media Assist</string>
+    <string name="media_assist_description">AirPods Pro can use the results of a hearing test to make adjustments that improve the clarity of music, video, and calls.</string>
+    <string name="adjust_media">Adjust Music and Video</string>
+    <string name="adjust_calls">Adjust Calls</string>
 </resources>

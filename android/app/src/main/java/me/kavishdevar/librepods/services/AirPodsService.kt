@@ -1856,7 +1856,6 @@ class AirPodsService : Service(), SharedPreferences.OnSharedPreferenceChangeList
     }
 
     private lateinit var connectionReceiver: BroadcastReceiver
-    private lateinit var disconnectionReceiver: BroadcastReceiver
 
     private fun resToUri(resId: Int): Uri? {
         return try {
@@ -2578,11 +2577,6 @@ class AirPodsService : Service(), SharedPreferences.OnSharedPreferenceChangeList
         }
         try {
             unregisterReceiver(connectionReceiver)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        try {
-            unregisterReceiver(disconnectionReceiver)
         } catch (e: Exception) {
             e.printStackTrace()
         }
