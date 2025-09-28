@@ -75,6 +75,24 @@ For installation and detailed info, see the [Linux README](/linux/README.md).
 > 
 > There are **no exceptions** to the root requirement until Google merges the fix.
 
+## Bluetooth DID (Device Identification) Hook
+
+Turns out, if you change the manufacturerid to that of Apple, you get access to several special features!
+
+### Multi-device Connectivity
+
+Upto two devices can be simultaneously connected to AirPods, for audio and control both. Seamless connection switching. The same notification shows up on Apple device when Android takes over the AirPods as if it were an Apple device ("Move to iPhone"). Android also shows a popup when the other device takes over.
+
+### Accessibility Settings and Hearing Aid
+
+Accessibility settings like customizing transparency mode (amplification, balance, tone, conversation boost, and ambient noise reduction), and loud sound reduction can be configured.
+
+The hearing aid feature can now also be used. Currently it can only be used to adjust the settings, not actually take a hearing test because it requires much more precision. It is much better to use an already available audiogram result.
+
+here's a very unprofessional demo
+
+https://github.com/user-attachments/assets/43911243-0576-4093-8c55-89c1db5ea533
+
 #### Installation Methods
 
 ##### Method 1: Xposed Module (Recommended)
@@ -115,20 +133,6 @@ If you're unfamiliar with these steps, search for tutorials online or ask in And
 - If you have take both AirPods out, the app will automatically switch to the phone speaker. But, Android might keep on trying to connect to the AirPods because the phone is still connected to them, just the A2DP profile is not connected. The app tries to disconnect the A2DP profile as soon as it detects that Android has connected again if they're not in the ear.
 
 - When renaming your AirPods through the app, you'll need to re-pair them with your phone for the name change to take effect. This is a limitation of how Bluetooth device naming works on Android.
-
-## Bluetooth DID (Device Identification) Hook
-
-Turns out, if you change the manufacturerid to that of Apple, you get access to several special features! 
-
-### Multi-device Connectivity
-
-Upto two devices can be simultaneously connected to AirPods, for audio and control both. Seamless connection switching. The same notification shows up on Apple device when Android takes over the AirPods as if it were an Apple device ("Move to iPhone"). Android also shows a popup when the other device takes over. 
-
-### Accessibility Settings and Hearing Aid
-
-Accessibility settings like customizing transparency mode (amplification, balance, tone, conversation boost, and ambient noise reduction), and loud sound reduction can be configured.
-
-The hearing aid feature can now also be used. Currently it can only be used to adjust the settings, not actually take a hearing test because it requires much more precision. It is much better to use an already available audiogram result. 
 
 ## Star History
 
