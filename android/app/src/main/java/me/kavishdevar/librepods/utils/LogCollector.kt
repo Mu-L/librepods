@@ -53,12 +53,20 @@ class LogCollector(private val context: Context) {
         }
     }
 
+    private suspend fun getBluetoothUID(): String? {
+        val pkgs = listOf("com.android.bluetooth", "com.google.android.bluetooth")
+        for (pkg in pkgs) {
+            val uid = executeRootCommand(
+                "dumpsys package $pkg | grep -m 1 \"uid=\" | sed -E 's/.*uid=([0-9]+).*/\\1/'"
+            ).trim()
+            if (uid.isNotEmpty()) return uid
+        }
+        return null
+    }
+
     private suspend fun getPackageUIDs(): Pair<String?, String?> {
         return withContext(Dispatchers.IO) {
-            val btUid = executeRootCommand("dumpsys package com.android.bluetooth | grep -m 1 \"uid=\" | sed -E 's/.*uid=([0-9]+).*/\\1/'")
-                .trim()
-                .takeIf { it.isNotEmpty() }
-
+            val btUid = getBluetoothUID()
             val appUid = executeRootCommand("dumpsys package me.kavishdevar.librepods | grep -m 1 \"uid=\" | sed -E 's/.*uid=([0-9]+).*/\\1/'")
                 .trim()
                 .takeIf { it.isNotEmpty() }
