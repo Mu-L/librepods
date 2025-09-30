@@ -110,8 +110,8 @@ fun LongPress(navController: NavController, name: String) {
     if (modesByte != null) {
         Log.d("PressAndHoldSettingsScreen", "Current modes state: ${modesByte.toString(2)}")
         Log.d("PressAndHoldSettingsScreen", "Off mode: ${(modesByte and 0x01) != 0.toByte()}")
-        Log.d("PressAndHoldSettingsScreen", "Transparency mode: ${(modesByte and 0x02) != 0.toByte()}")
-        Log.d("PressAndHoldSettingsScreen", "Noise Cancellation mode: ${(modesByte and 0x04) != 0.toByte()}")
+        Log.d("PressAndHoldSettingsScreen", "Transparency mode: ${(modesByte and 0x04) != 0.toByte()}")
+        Log.d("PressAndHoldSettingsScreen", "Noise Cancellation mode: ${(modesByte and 0x02) != 0.toByte()}")
         Log.d("PressAndHoldSettingsScreen", "Adaptive mode: ${(modesByte and 0x08) != 0.toByte()}")
     }
     val context = LocalContext.current
@@ -222,9 +222,9 @@ fun LongPress(navController: NavController, name: String) {
                         name = stringResource(R.string.transparency),
                         description = "Lets in external sounds",
                         iconRes = R.drawable.transparency,
-                        selected = (currentByte and 0x02) != 0,
+                        selected = (currentByte and 0x04) != 0,
                         onClick = {
-                            val bit = 0x02
+                            val bit = 0x04
                             val newValue = if ((currentByte and bit) != 0) {
                                 val temp = currentByte and bit.inv()
                                 if (countEnabledModes(temp) >= 2) temp else currentByte
@@ -268,9 +268,9 @@ fun LongPress(navController: NavController, name: String) {
                         name = stringResource(R.string.noise_cancellation),
                         description = "Blocks out external sounds",
                         iconRes = R.drawable.noise_cancellation,
-                        selected = (currentByte and 0x04) != 0,
+                        selected = (currentByte and 0x02) != 0,
                         onClick = {
-                            val bit = 0x04
+                            val bit = 0x02
                             val newValue = if ((currentByte and bit) != 0) {
                                 val temp = currentByte and bit.inv()
                                 if (countEnabledModes(temp) >= 2) temp else currentByte
