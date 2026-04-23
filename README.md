@@ -78,7 +78,7 @@ https://github.com/user-attachments/assets/43911243-0576-4093-8c55-89c1db5ea533
 
 The app needs root because of a bug in the Android Bluetooth stack Fluoride/non-compliance of Apple with Bluetooth standards. You must have Xposed installed for the app to workaround this bug and connect to AirPods. 
 
-(https://issuetracker.google.com/issues/371713238)[https://issuetracker.google.com/issues/371713238]
+[https://issuetracker.google.com/issues/371713238](https://issuetracker.google.com/issues/371713238)
 
 Please do not comment in the thread. The issue has already been resolved and should be available in Android 17 for all devices. 
 
