@@ -76,10 +76,23 @@ https://github.com/user-attachments/assets/43911243-0576-4093-8c55-89c1db5ea533
 
 ### Root Requirement
 
-If you are using ColorOS/OxygenOS 16, Android 16 QPR3, Android 17 Beta 3 or higher, you don't need root except for customizing transparency mode, setting up hearing aid, and use Bluetooth Multipoint. Changing ANC, conversational awareness, ear detection, and other customizations will work without root.
+The app needs root because of a bug in the Android Bluetooth stack Fluoride/non-compliance of Apple with Bluetooth standards. You must have Xposed installed for the app to workaround this bug and connect to AirPods. 
 
-For everyone else:
-**You must have a rooted device with Xposed to use LibrePods on Android.** 
+(https://issuetracker.google.com/issues/371713238)[https://issuetracker.google.com/issues/371713238]
+
+Please do not comment in the thread. The issue has already been resolved and should be available in Android 17 for all devices. 
+
+However, if you are using ColorOS/OxygenOS 16, Android 16 QPR3 on Pixel (ensure you're on the latest Play system update), you don't need root for most features.
+
+> [!IMPORTATN]
+> This workaround with Xposed is not guaranteed to work on all devices.
+
+Features requiring the VendorID hook will still require root. These features include customizing transparency mode, setting up hearing aid, and use Bluetooth Multipoint.
+
+### Troubleshooting steps for common errors
+- Ensure the correct scope is set in LSPosed/Vector.
+- Ensure there is no root-hiding module preventing the hook from loading on the Bluetooth app.
+- Restart your phone after confirming the scope.
 
 ### A few notes
 
@@ -129,7 +142,7 @@ A huge thank you to everyone supporting the project!
 - MagicPods for Steam Deck ([website](https://magicpods.app/steamdeck/))
 - MagicPods - if you're looking for "LibrePods for Windows"  ([ms store](https://apps.microsoft.com/store/detail/9P6SKKFKSHKM) [installer](https://magicpods.app/installer/MagicPods.appinstaller) | [website](https://magicpods.app/))
 
-# Nightly / Development Builds
+# Nightly/Development Builds
 
 Want to try the latest features before they're officially released? You can grab nightly builds from GitHub Actions:
 
@@ -140,7 +153,7 @@ Want to try the latest features before they're officially released? You can grab
 4. Extract the zip and install the `.apk` on your device
 
 > [!NOTE]
-> You need to be signed in to GitHub to download artifacts. Nightly builds are debug-signed and may not auto-update — you may need to uninstall the stable version first.
+> You need to be signed in to GitHub to download artifacts. Nightly builds are debug-signed and may not auto-update. You may need to uninstall the stable version first.
 
 ### Linux (Rust)
 1. Go to the [Actions tab](https://github.com/kavishdevar/librepods/actions/workflows/ci-linux-rust.yml)
