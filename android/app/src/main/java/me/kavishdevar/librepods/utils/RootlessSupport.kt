@@ -20,7 +20,6 @@ package me.kavishdevar.librepods.utils
 
 import android.content.SharedPreferences
 import android.os.Build
-import me.kavishdevar.librepods.BuildConfig
 
 fun isSupported(sharedPreferences: SharedPreferences): Boolean {
     val isPixel = Build.MANUFACTURER.lowercase() == "google"
@@ -37,7 +36,7 @@ fun isSupported(sharedPreferences: SharedPreferences): Boolean {
             }
         }
     } else if (isOppoOrOnePlus) {
-        return true
+        return Build.VERSION.SDK_INT == 36
     }
     return sharedPreferences.getBoolean("bypass_device_check", false)
 }
