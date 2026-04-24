@@ -1,5 +1,7 @@
 import java.util.Properties
 
+val versionName = "0.2.3"
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -29,15 +31,14 @@ android {
         minSdk = 33
         targetSdk = 37
         versionCode = 36
-        versionName = "0.2.3"
+        versionName = versionName
     }
     buildTypes {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
             externalNativeBuild {
                 cmake {
@@ -83,7 +84,7 @@ android {
     }
     sourceSets {
         getByName("main") {
-            res.directories+="src/main/res-apple"
+            res.directories += "src/main/res-apple"
         }
     }
 
@@ -144,9 +145,83 @@ dependencies {
 }
 
 aboutLibraries {
-    export{
+    export {
         prettyPrint = true
         excludeFields = listOf("generated")
         outputFile = file("src/main/res/raw/aboutlibraries.json")
     }
+}
+
+val rootModuleDir = rootProject.file("../root-module-manual")
+val releaseDir = rootProject.file("../release")
+
+fun cap(s: String) = s.replaceFirstChar { it.uppercase() }
+
+fun registerRootModuleZipTask(
+    name: String,
+    flavor: String,
+    buildType: String
+) = tasks.register<Zip>(name) {
+
+    val variantTask = "assemble${cap(flavor)}${cap(buildType)}"
+    dependsOn(variantTask)
+
+    val apkPath = "outputs/apk/$flavor/$buildType/app-$flavor-$buildType.apk"
+
+    from(rootModuleDir)
+
+    duplicatesStrategy = DuplicatesStrategy.WARN
+
+    from(layout.buildDirectory.file(apkPath)) {
+        into("system/priv-app/LibrePods")
+        rename { "LibrePods.apk" }
+    }
+
+    archiveFileName.set("LibrePods-FOSS-v$versionName-$buildType.zip")
+    destinationDirectory.set(layout.buildDirectory.dir("outputs/rootModuleZips"))
+}
+
+val zipRelease = registerRootModuleZipTask(
+    "zipXposedReleaseModule",
+    "xposed",
+    "release"
+)
+
+val zipDebug = registerRootModuleZipTask(
+    "zipXposedDebugModule",
+    "xposed",
+    "debug"
+)
+
+val collect = tasks.register<Copy>("collectReleaseArtifacts") {
+
+    dependsOn(
+        zipRelease,
+        zipDebug,
+        "bundleXposedPlayRelease"
+    )
+
+    into(releaseDir)
+
+    from(layout.buildDirectory.dir("outputs/apk/xposed/release")) {
+        include("*.apk")
+        rename(".*", "LibrePods-FOSS-v$versionName-release.apk")
+    }
+
+    from(layout.buildDirectory.dir("outputs/apk/xposed/debug")) {
+        include("*.apk")
+        rename(".*", "LibrePods-FOSS-v$versionName-debug.apk")
+    }
+
+    from(layout.buildDirectory.dir("outputs/bundle/xposedPlayRelease")) {
+        include("*.aab")
+    }
+
+    from(layout.buildDirectory.dir("outputs/rootModuleZips")) {
+        include("*.zip")
+    }
+}
+
+tasks.register("packageReleaseArtifacts") {
+    dependsOn(collect)
 }
