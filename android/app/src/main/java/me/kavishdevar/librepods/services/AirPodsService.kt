@@ -526,7 +526,7 @@ class AirPodsService : Service(), SharedPreferences.OnSharedPreferenceChangeList
 
         initializeConfig()
 
-        ancModeReceiver = object : BroadcastReceiver() {
+        externalBroadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
                 if (intent?.action == "me.kavishdevar.librepods.SET_ANC_MODE") {
                     if (intent.hasExtra("mode")) {
@@ -555,15 +555,23 @@ class AirPodsService : Service(), SharedPreferences.OnSharedPreferenceChangeList
                             "Cycling ANC mode from $currentMode to $nextMode"
                         )
                     }
+                } else  if (intent?.action == "me.kavishdevar.librepods.CONVO_DETECT") {
+                    if (intent.hasExtra("enabled")) {
+                        val enabled = intent.getBooleanExtra("enabled", false)
+                        aacpManager.sendControlCommand(
+                            AACPManager.Companion.ControlCommandIdentifiers.CONVERSATION_DETECT_CONFIG.value,
+                            enabled
+                        )
+                    }
                 }
             }
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(ancModeReceiver, ancModeFilter, RECEIVER_EXPORTED)
+            registerReceiver(externalBroadcastReceiver, externalBroadcastFilter, RECEIVER_EXPORTED)
         } else {
             @Suppress("UnspecifiedRegisterReceiverFlag") registerReceiver(
-                ancModeReceiver, ancModeFilter
+                externalBroadcastReceiver, externalBroadcastFilter
             )
         }
         val audioManager = this@AirPodsService.getSystemService(AUDIO_SERVICE) as AudioManager
@@ -2397,8 +2405,11 @@ class AirPodsService : Service(), SharedPreferences.OnSharedPreferenceChangeList
         }
     }
 
-    val ancModeFilter = IntentFilter("me.kavishdevar.librepods.SET_ANC_MODE")
-    var ancModeReceiver: BroadcastReceiver? = null
+    val externalBroadcastFilter = IntentFilter().apply {
+        addAction("me.kavishdevar.librepods.SET_ANC_MODE")
+        addAction("me.kavishdevar.librepods.CONVO_DETECT")
+    }
+    var externalBroadcastReceiver: BroadcastReceiver? = null
 
     @SuppressLint("InlinedApi", "MissingPermission", "UnspecifiedRegisterReceiverFlag")
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -3104,7 +3115,7 @@ class AirPodsService : Service(), SharedPreferences.OnSharedPreferenceChangeList
             e.printStackTrace()
         }
         try {
-            unregisterReceiver(ancModeReceiver)
+            unregisterReceiver(externalBroadcastReceiver)
         } catch (e: Exception) {
             e.printStackTrace()
         }
