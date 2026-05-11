@@ -20,11 +20,9 @@ body:
     attributes:
       label: App source
       options:
-        - GitHub release (FOSS)
+        - GitHub
         - Play Store
-        - Nightly build
         - Built from source
-        - Other
     validations:
       required: true
   - type: input
