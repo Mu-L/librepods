@@ -1,7 +1,6 @@
 name: Bug report (Android)
 description: Report a bug in the Android app
 labels: ["bug", "android"]
-title: "[Android] "
 body:
   - type: markdown
     attributes:
@@ -88,11 +87,13 @@ body:
       label: Logs
       description: |
         If you are rooted, give the app root access, open the app, go to `Settings → Troubleshooting → Collect Logs`, and attach the resulting file here.
+
         Without logs most bugs are very hard to diagnose. If you are not, follow these instructions:
-        
         (Needs access to a computer, and USB/Wireless Debugging under developer options enabled)
-        Get the uid: Linux/Mac: `adb shell dumpsys package me.kavishdevar.librepods | grep uid`
-        Start logs: `adb logcat --uid=<uid>,1002 >> librepods-logs.txt` (1002 is for bluetooth)
+
+        Commands:
+        - Get the uid: Linux/Mac: `adb shell dumpsys package me.kavishdevar.librepods | grep uid`
+        - Start logs: `adb logcat --uid=<uid>,1002 >> librepods-logs.txt` (1002 is for bluetooth)
         
         Steps for proper logs
         - force close the app
